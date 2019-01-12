@@ -2,6 +2,10 @@ package ro.utm.dbManager.frames;
 
 import org.apache.log4j.Logger;
 import ro.utm.dbManager.config.I18N;
+import ro.utm.dbManager.dao.DAOConnection;
+import ro.utm.dbManager.repository.CreditsRepository;
+import ro.utm.dbManager.repository.GradesRepository;
+import ro.utm.dbManager.repository.StudentRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +25,8 @@ public class Desktop extends JFrame {
     FrameAbout frameAbout = new FrameAbout();
     CreateTablesFrame createTablesFrame = new CreateTablesFrame();
     ManageStudentsFrame manageStudentsFrame = new ManageStudentsFrame();
+    ManageCreditsFrame manageCreditsFrame = new ManageCreditsFrame();
+    ManageGradesFrame manageGradesFrame = new ManageGradesFrame();
 
     // menu :
     MenuBar menuBar = new MenuBar();
@@ -43,6 +49,8 @@ public class Desktop extends JFrame {
         jDesktopPane.add(frameAbout);
         jDesktopPane.add(createTablesFrame);
         jDesktopPane.add(manageStudentsFrame);
+        jDesktopPane.add(manageCreditsFrame);
+        jDesktopPane.add(manageGradesFrame);
 
         // add the menu bar :
         setJMenuBar(menuBar);
@@ -100,7 +108,52 @@ public class Desktop extends JFrame {
             }
         });
 
+        // jMenuItemManageCredits :
+        menuBar.jMenuItemManageCredits.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                log.debug("ActionEvent on " + ev.getActionCommand());
+
+                // refresh the Table Model :
+                manageCreditsFrame.jTable1.setModel(manageCreditsFrame.getData());
+
+                manageCreditsFrame.setVisible(true);
+            }
+        });
+
+        // jMenuItemManageGrades :
+        menuBar.jMenuItemManageGrades.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                log.debug("ActionEvent on " + ev.getActionCommand());
+
+                // refresh the Table Model :
+                manageGradesFrame.jTable1.setModel(manageGradesFrame.getData());
+
+                manageGradesFrame.setVisible(true);
+            }
+        });
+
         setVisible(true);
+
+        StudentRepository studentRepository = new StudentRepository();
+        CreditsRepository creditsRepository = new CreditsRepository();
+        GradesRepository gradesRepository = new GradesRepository();
+
+        StringBuffer sb = new StringBuffer();
+
+        if (studentRepository.checkIfTableExists(DAOConnection.getInstance(), "students") &&
+                creditsRepository.checkIfTableExists(DAOConnection.getInstance(), "credits") &&
+                gradesRepository.checkIfTableExists(DAOConnection.getInstance(), "grades")) {
+            sb.append("Tables STUDENTS, CREDITS & GRADES has been created due to db.createTables parameter set to true!");
+        }
+
+        if (!studentRepository.findAll().isEmpty() && !creditsRepository.findAll().isEmpty() &&
+                !gradesRepository.findAll().isEmpty()) {
+            sb.append("\nTables STUDENTS, CREDITS & GRADES have some dummy data due to db.populateTables parameter set to true!");
+        }
+
+        if (!sb.toString().isEmpty()) {
+            JOptionPane.showMessageDialog(null, sb.toString(), "Database information", JOptionPane.INFORMATION_MESSAGE);
+        }
 
     }
 

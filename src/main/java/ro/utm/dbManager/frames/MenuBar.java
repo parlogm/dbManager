@@ -51,6 +51,14 @@ public class MenuBar extends JMenuBar
         jMenuDatabaseActions.add(jMenuItemManageStudents);
         jMenuDatabaseActions.addSeparator();
 
+        jMenuItemManageCredits.setAccelerator(KeyStroke.getKeyStroke('D', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jMenuDatabaseActions.add(jMenuItemManageCredits);
+        jMenuDatabaseActions.addSeparator();
+
+        jMenuItemManageGrades.setAccelerator(KeyStroke.getKeyStroke('G', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jMenuDatabaseActions.add(jMenuItemManageGrades);
+        jMenuDatabaseActions.addSeparator();
+
         jMenuItemQuit.setAccelerator(KeyStroke.getKeyStroke('Q', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuDatabaseActions.add(jMenuItemQuit);
 

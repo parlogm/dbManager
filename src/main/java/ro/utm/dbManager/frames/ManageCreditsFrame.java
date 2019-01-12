@@ -1,9 +1,9 @@
 package ro.utm.dbManager.frames;
 
 import org.apache.log4j.Logger;
-import ro.utm.dbManager.beans.StudentBean;
+import ro.utm.dbManager.beans.CreditsBean;
 import ro.utm.dbManager.config.I18N;
-import ro.utm.dbManager.repository.StudentRepository;
+import ro.utm.dbManager.repository.CreditsRepository;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -12,18 +12,18 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ManageStudentsFrame extends JInternalFrame {
+public class ManageCreditsFrame extends JInternalFrame {
 
-    final static Logger log = Logger.getLogger(ManageStudentsFrame.class);
+    final static Logger log = Logger.getLogger(ManageCreditsFrame.class);
 
     JPanel jPanelHeader = new JPanel();
-    JButton jButtonDelete = new JButton(I18N.lang("manageStudentsFrame.jButtonDelete"));
-    JButton jButtonAdd = new JButton(I18N.lang("manageStudentsFrame.jButtonAdd"));
-    JButton jButtonEdit = new JButton(I18N.lang("manageStudentsFrame.jButtonEdit"));
+    JButton jButtonDelete = new JButton(I18N.lang("manageCreditsFrame.jButtonDelete"));
+    JButton jButtonAdd = new JButton(I18N.lang("manageCreditsFrame.jButtonAdd"));
+    JButton jButtonEdit = new JButton(I18N.lang("manageCreditsFrame.jButtonEdit"));
     public JTable jTable1;
 
-    public ManageStudentsFrame() {
-        setTitle(I18N.lang("manageStudentsFrame.title"));
+    public ManageCreditsFrame() {
+        setTitle(I18N.lang("manageCreditsFrame.title"));
         setLocation(new Random().nextInt(100), new Random().nextInt(100));
         setSize(550, 350);
         setVisible(false);
@@ -34,7 +34,7 @@ public class ManageStudentsFrame extends JInternalFrame {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
 
         // header :
-        jPanelHeader.setBorder(BorderFactory.createTitledBorder(I18N.lang("manageStudentsFrame.jPanelHeader")));
+        jPanelHeader.setBorder(BorderFactory.createTitledBorder(I18N.lang("manageCreditsFrame.jPanelHeader")));
 
         jPanelHeader.add(jButtonDelete);
         jButtonDelete.addActionListener((ActionEvent ev) ->
@@ -74,34 +74,26 @@ public class ManageStudentsFrame extends JInternalFrame {
         // Comumns :
         String[] columns = new String[]
                 {
-                        I18N.lang("manageStudentsFrame.jTable1.column.id"),
-                        I18N.lang("manageStudentsFrame.jTable1.column.firstName"),
-                        I18N.lang("manageStudentsFrame.jTable1.column.lastName"),
-                        I18N.lang("manageStudentsFrame.jTable1.column.eMail"),
-                        I18N.lang("manageStudentsFrame.jTable1.column.regNr"),
-                        I18N.lang("manageStudentsFrame.jTable1.column.group"),
-                        I18N.lang("manageStudentsFrame.jTable1.column.year"),
-                        I18N.lang("manageStudentsFrame.jTable1.column.phone")
+                        I18N.lang("manageCreditsFrame.jTable1.column.id"),
+                        I18N.lang("manageCreditsFrame.jTable1.column.name"),
+                        I18N.lang("manageCreditsFrame.jTable1.column.nr"),
+                        I18N.lang("manageCreditsFrame.jTable1.column.code")
                 };
 
         DefaultTableModel model = new DefaultTableModel(columns, 0);
 
         // get data rows :
-        StudentRepository studentRepository = new StudentRepository();
-        ArrayList<StudentBean> students = studentRepository.findAll();
+        CreditsRepository creditsRepository = new CreditsRepository();
+        ArrayList<CreditsBean> credits = creditsRepository.findAll();
 
         // transform ArrayList<> to Object[][] :
-        for (StudentBean student : students) {
+        for (CreditsBean credit : credits) {
             model.addRow(new Object[]
                     {
-                            student.getId(),
-                            student.getFirstName(),
-                            student.getLastName(),
-                            student.geteMail(),
-                            student.getStudentRegNr(),
-                            student.getStudentGroup(),
-                            student.getStudentYear(),
-                            student.getPhone()
+                            credit.getId(),
+                            credit.getCrdName(),
+                            credit.getCrdNr(),
+                            credit.getCrdCode()
                     });
         }
 
@@ -114,11 +106,11 @@ public class ManageStudentsFrame extends JInternalFrame {
         log.debug("selectedRowCount : " + jTable1.getSelectedRowCount());
 
         if (jTable1.getSelectedRowCount() > 0) {
-            StudentRepository studentRepository = new StudentRepository();
+            CreditsRepository creditsRepository = new CreditsRepository();
             int[] selectedRows = jTable1.getSelectedRows();
             for (int index = 0; index < selectedRows.length; index++) {
                 log.debug("Delete row with id=" + jTable1.getValueAt(selectedRows[index], 0));
-                studentRepository.delete((long) jTable1.getValueAt(selectedRows[index], 0));
+                creditsRepository.delete((long) jTable1.getValueAt(selectedRows[index], 0));
             }
 
             // refresh the Table Model :
@@ -129,7 +121,7 @@ public class ManageStudentsFrame extends JInternalFrame {
     public void jButtonAddActionPerformed(ActionEvent ev) {
         log.debug("ActionEvent on " + ev.getActionCommand());
 
-        new ManageStudentsDialog(null, I18N.lang("manageStudentDialog.addTitle"), true, true, null);
+        new ManageCreditsDialog(null, I18N.lang("manageCreditsDialog.addTitle"), true, true, null);
 
         // refresh the Table Model :
         jTable1.setModel(this.getData());
@@ -139,12 +131,12 @@ public class ManageStudentsFrame extends JInternalFrame {
         log.debug("ActionEvent on " + ev.getActionCommand());
 
         if (jTable1.getSelectedRowCount() > 0) {
-            long student_id = (long) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
-            log.debug("Trying to edit student with id : " + student_id);
+            long credit_id = (long) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+            log.debug("Trying to edit credit with id : " + credit_id);
 
-            StudentRepository studentRepository = new StudentRepository();
+            CreditsRepository creditsRepository = new CreditsRepository();
 
-            new ManageStudentsDialog(null, I18N.lang("manageStudentDialog.editTitle"), true, false, studentRepository.find(student_id));
+            new ManageCreditsDialog(null, I18N.lang("manageCreditsDialog.editTitle"), true, false, creditsRepository.find(credit_id));
 
             // refresh the Table Model :
             jTable1.setModel(this.getData());
@@ -152,3 +144,4 @@ public class ManageStudentsFrame extends JInternalFrame {
     }
 
 }
+

@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import ro.utm.dbManager.beans.GradesBean;
 import ro.utm.dbManager.dao.DAOConnection;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -82,6 +83,7 @@ public class GradesRepository implements Repository<GradesBean> {
 
         } catch (SQLException e) {
             log.error("Error creating new grade : " + e);
+            JOptionPane.showMessageDialog(null, "Error creating new grade : " + e, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         return objectToReturn;
@@ -115,6 +117,7 @@ public class GradesRepository implements Repository<GradesBean> {
 
         } catch (SQLException e) {
             log.error("Error updating grade : " + e);
+            JOptionPane.showMessageDialog(null, "Error updating grade : " + e, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         return objectToReturn;

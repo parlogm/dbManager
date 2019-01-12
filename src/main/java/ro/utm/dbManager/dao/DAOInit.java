@@ -21,6 +21,10 @@ public class DAOInit {
             DAOInit.createTables();
         }
 
+        if ("true".equalsIgnoreCase(PropertyHolder.getProperty("db.populateTables"))) {
+            DAOInit.populateTables();
+        }
+
         if ("true".equalsIgnoreCase(PropertyHolder.getProperty("db.startH2Console"))) {
             DAOInit.startH2WebConsole();
         }
@@ -61,6 +65,12 @@ public class DAOInit {
         createGradesTable();
     }
 
+    private static void populateTables() {
+        populateStudentsTable();
+        populateCreditsTable();
+        populateGradesTable();
+    }
+
     private static void createStudentsTable() {
         String createQuery = "CREATE TABLE IF NOT EXISTS students("
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
@@ -96,14 +106,43 @@ public class DAOInit {
         executeQuery(createQuery, "grades");
     }
 
+    public static void populateStudentsTable() {
+        String query = "INSERT INTO students VALUES" +
+                "  (1, 'Mihai', 'Parlog', 'mihai.parlog@student.utm.ro', '19283', '2019', '333A', '0723817212')," +
+                "  (2, 'Ionut', 'Baldochin', 'ionut.baldochin@student.utm.ro', '15313', '2019', '333B', '0727847421')," +
+                "  (3, 'Maria', 'Ion', 'maria.ion@student.utm.ro', '18123', '2018', '323C', '0715217826')," +
+                "  (4, 'Ioana', 'Paslaru', 'ioana.paslaru@student.utm.ro', '65348', '2019', '313D', '0765885421')";
+        executeQuery(query, "students");
+    }
+
+    public static void populateCreditsTable() {
+        String query = "INSERT INTO credits VALUES" +
+                "  (1, 'Analiza numerica I', '5', 'AN1')," +
+                "  (2, 'Analiza numerica II', '6', 'AN2')," +
+                "  (3, 'Fizica', '4', 'FZ')," +
+                "  (4, 'Tehnologii WEB', '6', 'TW')," +
+                "  (5, 'Informatica aplicata in industrie', '5', 'IAI')," +
+                "  (6, 'Programare orientata pe obiecte', '6', 'POO')";
+        executeQuery(query, "credits");
+    }
+
+    public static void populateGradesTable() {
+        String query = "INSERT INTO grades VALUES" +
+                "  (1, 'Analiza numerica I', 'AN1', 1, '6')," +
+                "  (2, 'Analiza numerica II', 'AN2', 1, '8')," +
+                "  (3, 'Fizica', 'FZ', 2, '9')," +
+                "  (4, 'Tehnologii WEB', 'TW', 2, '5')," +
+                "  (5, 'Informatica aplicata in industrie', 'IAI', 2, '9')," +
+                "  (6, 'Programare orientata pe obiecte', 'POO', 3, '6')";
+        executeQuery(query, "grades");
+    }
+
     private static void executeQuery (String query, String tableName) {
         try {
             PreparedStatement ps = DAOConnection.getInstance().prepareStatement(query);
             ps.executeUpdate();
-
-            log.info("Table " + tableName + " created.");
         } catch (SQLException e) {
-            log.error("Error creating table students : " + e);
+            log.error("Error executing query : " + e);
             e.printStackTrace();
         }
     }

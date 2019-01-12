@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import ro.utm.dbManager.beans.StudentBean;
 import ro.utm.dbManager.dao.DAOConnection;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -86,6 +87,7 @@ public class StudentRepository implements Repository<StudentBean> {
 
         } catch (SQLException e) {
             log.error("Error creating new student : " + e);
+            JOptionPane.showMessageDialog(null, "Error creating new student : " + e, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         return objectToReturn;
@@ -125,6 +127,7 @@ public class StudentRepository implements Repository<StudentBean> {
 
         } catch (SQLException e) {
             log.error("Error updating student : " + e);
+            JOptionPane.showMessageDialog(null, "Error updating student : " + e, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         return objectToReturn;

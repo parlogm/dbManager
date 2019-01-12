@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import ro.utm.dbManager.beans.CreditsBean;
 import ro.utm.dbManager.dao.DAOConnection;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -81,6 +82,7 @@ public class CreditsRepository implements Repository<CreditsBean> {
 
         } catch (SQLException e) {
             log.error("Error creating new credit : " + e);
+            JOptionPane.showMessageDialog(null, "Error creating new credit : " + e, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         return objectToReturn;
@@ -112,6 +114,7 @@ public class CreditsRepository implements Repository<CreditsBean> {
 
         } catch (SQLException e) {
             log.error("Error updating credit : " + e);
+            JOptionPane.showMessageDialog(null, "Error updating credit : " + e, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         return objectToReturn;

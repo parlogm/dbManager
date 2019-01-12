@@ -3,6 +3,7 @@ package ro.utm.dbManager.frames;
 import org.apache.log4j.Logger;
 import ro.utm.dbManager.beans.StudentBean;
 import ro.utm.dbManager.config.I18N;
+import ro.utm.dbManager.dao.DAOConnection;
 import ro.utm.dbManager.repository.StudentRepository;
 
 import javax.swing.*;
@@ -52,10 +53,10 @@ public class ManageStudentsDialog extends JDialog {
 
         // new :
         if (isNew) {
-            setLayout(new GridLayout(4, 2));
+            setLayout(new GridLayout(8, 2));
         } // modification :
         else {
-            setLayout(new GridLayout(5, 2));
+            setLayout(new GridLayout(9, 2));
             getContentPane().add(jLabelId);
             getContentPane().add(jTextFieldId);
             jTextFieldId.setEditable(false);
@@ -111,25 +112,29 @@ public class ManageStudentsDialog extends JDialog {
         log.debug("ActionEvent on " + ev.getActionCommand());
 
         StudentRepository studentRepository = new StudentRepository();
-        StudentBean studentBean = new StudentBean();
+        if (studentRepository.checkIfTableExists(DAOConnection.getInstance(), "students")) {
+            StudentBean studentBean = new StudentBean();
 
-        studentBean.setFirstName(jTextFieldFirstName.getText());
-        studentBean.setLastName(jTextFieldLastName.getText());
-        studentBean.seteMail(jTextFieldEmail.getText());
-        studentBean.setStudentRegNr(jTextFieldRegNr.getText());
-        studentBean.setStudentYear(jTextFieldYear.getText());
-        studentBean.setStudentGroup(jTextFieldGroup.getText());
-        studentBean.setPhone(jTextFieldPhone.getText());
+            studentBean.setFirstName(jTextFieldFirstName.getText());
+            studentBean.setLastName(jTextFieldLastName.getText());
+            studentBean.seteMail(jTextFieldEmail.getText());
+            studentBean.setStudentRegNr(jTextFieldRegNr.getText());
+            studentBean.setStudentYear(jTextFieldYear.getText());
+            studentBean.setStudentGroup(jTextFieldGroup.getText());
+            studentBean.setPhone(jTextFieldPhone.getText());
 
-        if (this.isNew) {
-            if (studentRepository.create(studentBean) != null) {
-                this.dispose();
+            if (this.isNew) {
+                if (studentRepository.create(studentBean) != null) {
+                    this.dispose();
+                }
+            } else {
+                studentBean.setId(this.studentToEdit.getId());
+                if (studentRepository.update(studentBean) != null) {
+                    this.dispose();
+                }
             }
         } else {
-            studentBean.setId(this.studentToEdit.getId());
-            if (studentRepository.update(studentBean) != null) {
-                this.dispose();
-            }
+            JOptionPane.showMessageDialog(null, "STUDENTS table does not exist", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

@@ -71,12 +71,12 @@ public class CreateTablesFrame extends JInternalFrame {
 
         jPopulateCreditsTableButton.addActionListener((ActionEvent ev) ->
         {
-            createStudentsTable(ev);
+            populateCreditsTable(ev);
         });
 
         jPopulateGradesTableButton.addActionListener((ActionEvent ev) ->
         {
-            createStudentsTable(ev);
+            populateGradesTable(ev);
         });
 
         setVisible(false);
@@ -145,6 +145,30 @@ public class CreateTablesFrame extends JInternalFrame {
                 "  (3, 'Maria', 'Ion', 'maria.ion@student.utm.ro', '18123', '2018', '323C', '0715217826')," +
                 "  (4, 'Ioana', 'Paslaru', 'ioana.paslaru@student.utm.ro', '65348', '2019', '313D', '0765885421')";
         executeInsertBulkQuery(query, "students");
+    }
+
+    public void populateCreditsTable(ActionEvent ev) {
+        log.debug("ActionEvent on " + ev.getActionCommand());
+        String query = "INSERT INTO credits VALUES" +
+                "  (1, 'Analiza numerica I', '5', 'AN1')," +
+                "  (2, 'Analiza numerica II', '6', 'AN2')," +
+                "  (3, 'Fizica', '4', 'FZ')," +
+                "  (4, 'Tehnologii WEB', '6', 'TW')," +
+                "  (5, 'Informatica aplicata in industrie', '5', 'IAI')," +
+                "  (6, 'Programare orientata pe obiecte', '6', 'POO')";
+        executeInsertBulkQuery(query, "credits");
+    }
+
+    public void populateGradesTable(ActionEvent ev) {
+        log.debug("ActionEvent on " + ev.getActionCommand());
+        String query = "INSERT INTO grades VALUES" +
+                "  (1, 'Analiza numerica I', 'AN1', 1, '6')," +
+                "  (2, 'Analiza numerica II', 'AN2', 1, '8')," +
+                "  (3, 'Fizica', 'FZ', 2, '9')," +
+                "  (4, 'Tehnologii WEB', 'TW', 2, '5')," +
+                "  (5, 'Informatica aplicata in industrie', 'IAI', 2, '9')," +
+                "  (6, 'Programare orientata pe obiecte', 'POO', 3, '6')";
+        executeInsertBulkQuery(query, "grades");
     }
 
     private void executeQuery(String query, String tableName) {
