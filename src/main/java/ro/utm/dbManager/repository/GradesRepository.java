@@ -1,23 +1,23 @@
 package ro.utm.dbManager.repository;
 
 import org.apache.log4j.Logger;
-import ro.utm.dbManager.beans.StudentBean;
+import ro.utm.dbManager.beans.GradesBean;
 import ro.utm.dbManager.dao.DAOConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class StudentRepository implements Repository<StudentBean> {
+public class GradesRepository implements Repository<GradesBean> {
 
-    final static Logger log = Logger.getLogger(StudentRepository.class);
+    final static Logger log = Logger.getLogger(GradesRepository.class);
 
     @Override
-    public StudentBean find(long id) {
-        StudentBean obj = null;
+    public GradesBean find(long id) {
+        GradesBean obj = null;
 
         try {
             PreparedStatement prepared = DAOConnection.getInstance().prepareStatement(
-                    "SELECT * FROM students WHERE id=?");
+                    "SELECT * FROM grades WHERE id=?");
 
             prepared.setLong(1, id);
 
@@ -28,50 +28,46 @@ public class StudentRepository implements Repository<StudentBean> {
             }
 
         } catch (SQLException e) {
-            log.error("Error finding student : " + e);
+            log.error("Error finding grade : " + e);
         }
 
         return obj;
     }
 
     @Override
-
-    public ArrayList<StudentBean> findAll() {
-        ArrayList<StudentBean> students = new ArrayList<>();
+    public ArrayList<GradesBean> findAll() {
+        ArrayList<GradesBean> grades = new ArrayList<>();
 
         try {
             PreparedStatement prepared = DAOConnection.getInstance().prepareStatement(
-                    "SELECT * FROM students");
+                    "SELECT * FROM grades");
 
             ResultSet result = prepared.executeQuery();
 
             while (result.next()) {
-                students.add(map(result));
+                grades.add(map(result));
             }
 
         } catch (SQLException e) {
-            log.error("Error finding students : " + e);
+            log.error("Error finding grades : " + e);
         }
 
-        return students;
+        return grades;
     }
 
     @Override
-    public StudentBean create(StudentBean obj) {
-        StudentBean objectToReturn = null;
+    public GradesBean create(GradesBean obj) {
+        GradesBean objectToReturn = null;
 
         try {
             PreparedStatement prepared = DAOConnection.getInstance().prepareStatement(
-                    " INSERT INTO students (first_name, last_name, e_mail, student_reg_nr, student_year, student_group, phone) "
-                            + " VALUES(?, ?, ?, ?, ?, ?, ?) ", Statement.RETURN_GENERATED_KEYS);
+                    " INSERT INTO grades (name_crd, code_crd, id_std, grade) "
+                            + " VALUES(?, ?, ?, ?) ", Statement.RETURN_GENERATED_KEYS);
 
-            prepared.setString(1, obj.getFirstName());
-            prepared.setString(2, obj.getLastName());
-            prepared.setString(3, obj.geteMail());
-            prepared.setString(4, obj.getStudentRegNr());
-            prepared.setString(5, obj.getStudentYear());
-            prepared.setString(6, obj.getStudentGroup());
-            prepared.setString(7, obj.getPhone());
+            prepared.setString(1, obj.getCrdName());
+            prepared.setString(2, obj.getCrdCode());
+            prepared.setLong(3, obj.getStdId());
+            prepared.setString(4, obj.getGrade());
 
             // execute query and get the affected rows number :
             int affectedRows = prepared.executeUpdate();
@@ -85,36 +81,30 @@ public class StudentRepository implements Repository<StudentBean> {
             }
 
         } catch (SQLException e) {
-            log.error("Error creating new student : " + e);
+            log.error("Error creating new grade : " + e);
         }
 
         return objectToReturn;
     }
 
     @Override
-    public StudentBean update(StudentBean obj) {
-        StudentBean objectToReturn = null;
+    public GradesBean update(GradesBean obj) {
+        GradesBean objectToReturn = null;
 
         try {
             PreparedStatement prepared = DAOConnection.getInstance().prepareStatement(
-                    " UPDATE students "
-                            + " SET first_name=?, "
-                            + " last_name=?, "
-                            + " e_mail=?, "
-                            + " student_reg_nr=?, "
-                            + " student_year=?, "
-                            + " student_group=?, "
-                            + " phone=? "
+                    " UPDATE grades "
+                            + " SET name_crd=?, "
+                            + " code_crd=?, "
+                            + " id_std=?, "
+                            + " grade=?"
                             + " WHERE id=? ");
 
-            prepared.setString(1, obj.getFirstName());
-            prepared.setString(2, obj.getLastName());
-            prepared.setString(3, obj.geteMail());
-            prepared.setString(4, obj.getStudentRegNr());
-            prepared.setString(5, obj.getStudentYear());
-            prepared.setString(6, obj.getStudentGroup());
-            prepared.setString(7, obj.getPhone());
-            prepared.setLong(8, obj.getId());
+            prepared.setString(1, obj.getCrdName());
+            prepared.setString(2, obj.getCrdCode());
+            prepared.setLong(3, obj.getStdId());
+            prepared.setString(4, obj.getGrade());
+            prepared.setLong(5, obj.getId());
 
             // execute query and get the affected rows number :
             int affectedRows = prepared.executeUpdate();
@@ -124,7 +114,7 @@ public class StudentRepository implements Repository<StudentBean> {
             }
 
         } catch (SQLException e) {
-            log.error("Error updating student : " + e);
+            log.error("Error updating grade : " + e);
         }
 
         return objectToReturn;
@@ -136,7 +126,7 @@ public class StudentRepository implements Repository<StudentBean> {
 
         try {
             PreparedStatement prepared = DAOConnection.getInstance().prepareStatement(
-                    " DELETE FROM students "
+                    " DELETE FROM grades "
                             + " WHERE id=? ");
 
             prepared.setLong(1, id);
@@ -145,7 +135,7 @@ public class StudentRepository implements Repository<StudentBean> {
             affectedRows = prepared.executeUpdate();
 
         } catch (SQLException e) {
-            log.error("Error deleting student : " + e);
+            log.error("Error deleting credit : " + e);
         }
 
         return affectedRows;
@@ -175,10 +165,8 @@ public class StudentRepository implements Repository<StudentBean> {
      * @return The mapped Object from the current row of the given ResultSet.
      * @throws SQLException If something fails at database level.
      */
-    private static StudentBean map(ResultSet resultSet) throws SQLException {
-        return new StudentBean(resultSet.getLong("id"), resultSet.getString("first_name"),
-                resultSet.getString("last_name"), resultSet.getString("e_mail"),
-                resultSet.getString("student_reg_nr"), resultSet.getString("student_year"),
-                resultSet.getString("student_group"), resultSet.getString("phone"));
+    private static GradesBean map(ResultSet resultSet) throws SQLException {
+        return new GradesBean(resultSet.getLong("id"), resultSet.getString("name_crd"),
+                resultSet.getString("code_crd"), Long.valueOf(resultSet.getString("id_std")), resultSet.getString("grade"));
     }
 }

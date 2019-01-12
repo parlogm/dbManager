@@ -53,12 +53,6 @@ public class StudentBean implements Serializable {
         this.id = id;
     }
 
-    @Override
-    public String toString()
-    {
-        return "StudentBean{" + "id=" + id + ", First name=" + firstName + ", Last name=" + lastName + ", E-mail=" + eMail + '}';
-    }
-
     public String getStudentRegNr() {
         return studentRegNr;
     }
@@ -97,5 +91,11 @@ public class StudentBean implements Serializable {
 
     public void seteMail(String eMail) {
         this.eMail = eMail;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "StudentBean{" + "id=" + id + ", First name=" + firstName + ", Last name=" + lastName + ", E-mail=" + eMail + '}';
     }
 }
