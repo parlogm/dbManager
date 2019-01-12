@@ -24,6 +24,8 @@ public class Desktop extends JFrame {
     // internal frames :
     FrameAbout frameAbout = new FrameAbout();
     CreateTablesFrame createTablesFrame = new CreateTablesFrame();
+    TruncateTablesFrame truncateTablesFrame = new TruncateTablesFrame();
+    DropTablesFrame dropTablesFrame = new DropTablesFrame();
     ManageStudentsFrame manageStudentsFrame = new ManageStudentsFrame();
     ManageCreditsFrame manageCreditsFrame = new ManageCreditsFrame();
     ManageGradesFrame manageGradesFrame = new ManageGradesFrame();
@@ -48,6 +50,8 @@ public class Desktop extends JFrame {
         // add internal frames to desktop :
         jDesktopPane.add(frameAbout);
         jDesktopPane.add(createTablesFrame);
+        jDesktopPane.add(truncateTablesFrame);
+        jDesktopPane.add(dropTablesFrame);
         jDesktopPane.add(manageStudentsFrame);
         jDesktopPane.add(manageCreditsFrame);
         jDesktopPane.add(manageGradesFrame);
@@ -81,6 +85,24 @@ public class Desktop extends JFrame {
                 log.debug("ActionEvent on " + ev.getActionCommand());
 
                 createTablesFrame.setVisible(true);
+            }
+        });
+
+        // jMenuItemTruncateTables :
+        menuBar.jMenuItemTruncateTables.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                log.debug("ActionEvent on " + ev.getActionCommand());
+
+                truncateTablesFrame.setVisible(true);
+            }
+        });
+
+        // jMenuItemDropTables :
+        menuBar.jMenuItemDropTables.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                log.debug("ActionEvent on " + ev.getActionCommand());
+
+                dropTablesFrame.setVisible(true);
             }
         });
 

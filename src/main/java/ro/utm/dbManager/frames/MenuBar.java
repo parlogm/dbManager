@@ -16,6 +16,8 @@ public class MenuBar extends JMenuBar
     // Database actions :
     JMenu jMenuDatabaseActions = new JMenu(I18N.lang("menubar.jMenuDatabaseActions"));
     JMenuItem jMenuItemCreateTables = new JMenuItem(I18N.lang("menubar.jMenuItemCreateTables"));
+    JMenuItem jMenuItemTruncateTables = new JMenuItem(I18N.lang("menubar.jMenuItemTruncateTables"));
+    JMenuItem jMenuItemDropTables = new JMenuItem(I18N.lang("menubar.jMenuItemDropTables"));
     JMenuItem jMenuItemManageStudents = new JMenuItem(I18N.lang("menubar.jMenuItemStudents"));
     JMenuItem jMenuItemManageCredits = new JMenuItem(I18N.lang("menubar.jMenuItemCredits"));
     JMenuItem jMenuItemManageGrades = new JMenuItem(I18N.lang("menubar.jMenuItemGrades"));
@@ -40,6 +42,14 @@ public class MenuBar extends JMenuBar
 
         jMenuItemCreateTables.setAccelerator(KeyStroke.getKeyStroke('C', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuDatabaseActions.add(jMenuItemCreateTables);
+        jMenuDatabaseActions.addSeparator();
+
+        jMenuItemTruncateTables.setAccelerator(KeyStroke.getKeyStroke('T', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jMenuDatabaseActions.add(jMenuItemTruncateTables);
+        jMenuDatabaseActions.addSeparator();
+
+        jMenuItemDropTables.setAccelerator(KeyStroke.getKeyStroke('P', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jMenuDatabaseActions.add(jMenuItemDropTables);
         jMenuDatabaseActions.addSeparator();
 
         /*if (studentRepository.checkIfTableExists(DAOConnection.getInstance(), "students")) {

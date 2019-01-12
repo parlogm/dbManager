@@ -139,36 +139,51 @@ public class CreateTablesFrame extends JInternalFrame {
 
     public void populateStudentsTable(ActionEvent ev) {
         log.debug("ActionEvent on " + ev.getActionCommand());
-        String query = "INSERT INTO students VALUES" +
-                "  (1, 'Mihai', 'Parlog', 'mihai.parlog@student.utm.ro', '19283', '2019', '333A', '0723817212')," +
-                "  (2, 'Ionut', 'Baldochin', 'ionut.baldochin@student.utm.ro', '15313', '2019', '333B', '0727847421')," +
-                "  (3, 'Maria', 'Ion', 'maria.ion@student.utm.ro', '18123', '2018', '323C', '0715217826')," +
-                "  (4, 'Ioana', 'Paslaru', 'ioana.paslaru@student.utm.ro', '65348', '2019', '313D', '0765885421')";
-        executeInsertBulkQuery(query, "students");
+        StudentRepository studentRepository = new StudentRepository();
+        if (!studentRepository.checkIfTableExists(DAOConnection.getInstance(), "students")) {
+            JOptionPane.showMessageDialog(null, "Students table does not exist  ", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            String query = "INSERT INTO students VALUES" +
+                    "  (1, 'Mihai', 'Parlog', 'mihai.parlog@student.utm.ro', '19283', '2019', '333A', '0723817212')," +
+                    "  (2, 'Ionut', 'Baldochin', 'ionut.baldochin@student.utm.ro', '15313', '2019', '333B', '0727847421')," +
+                    "  (3, 'Maria', 'Ion', 'maria.ion@student.utm.ro', '18123', '2018', '323C', '0715217826')," +
+                    "  (4, 'Ioana', 'Paslaru', 'ioana.paslaru@student.utm.ro', '65348', '2019', '313D', '0765885421')";
+            executeInsertBulkQuery(query, "students");
+        }
     }
 
     public void populateCreditsTable(ActionEvent ev) {
         log.debug("ActionEvent on " + ev.getActionCommand());
-        String query = "INSERT INTO credits VALUES" +
-                "  (1, 'Analiza numerica I', '5', 'AN1')," +
-                "  (2, 'Analiza numerica II', '6', 'AN2')," +
-                "  (3, 'Fizica', '4', 'FZ')," +
-                "  (4, 'Tehnologii WEB', '6', 'TW')," +
-                "  (5, 'Informatica aplicata in industrie', '5', 'IAI')," +
-                "  (6, 'Programare orientata pe obiecte', '6', 'POO')";
-        executeInsertBulkQuery(query, "credits");
+        CreditsRepository creditsRepository = new CreditsRepository();
+        if (!creditsRepository.checkIfTableExists(DAOConnection.getInstance(), "credits")) {
+            JOptionPane.showMessageDialog(null, "Credits table does not exist  ", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            String query = "INSERT INTO credits VALUES" +
+                    "  (1, 'Analiza numerica I', '5', 'AN1')," +
+                    "  (2, 'Analiza numerica II', '6', 'AN2')," +
+                    "  (3, 'Fizica', '4', 'FZ')," +
+                    "  (4, 'Tehnologii WEB', '6', 'TW')," +
+                    "  (5, 'Informatica aplicata in industrie', '5', 'IAI')," +
+                    "  (6, 'Programare orientata pe obiecte', '6', 'POO')";
+            executeInsertBulkQuery(query, "credits");
+        }
     }
 
     public void populateGradesTable(ActionEvent ev) {
         log.debug("ActionEvent on " + ev.getActionCommand());
-        String query = "INSERT INTO grades VALUES" +
-                "  (1, 'Analiza numerica I', 'AN1', 1, '6')," +
-                "  (2, 'Analiza numerica II', 'AN2', 1, '8')," +
-                "  (3, 'Fizica', 'FZ', 2, '9')," +
-                "  (4, 'Tehnologii WEB', 'TW', 2, '5')," +
-                "  (5, 'Informatica aplicata in industrie', 'IAI', 2, '9')," +
-                "  (6, 'Programare orientata pe obiecte', 'POO', 3, '6')";
-        executeInsertBulkQuery(query, "grades");
+        GradesRepository gradesRepository = new GradesRepository();
+        if (!gradesRepository.checkIfTableExists(DAOConnection.getInstance(), "grades")) {
+            JOptionPane.showMessageDialog(null, "Grades table does not exist  ", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            String query = "INSERT INTO grades VALUES" +
+                    "  (1, 'Analiza numerica I', 'AN1', 1, '6')," +
+                    "  (2, 'Analiza numerica II', 'AN2', 1, '8')," +
+                    "  (3, 'Fizica', 'FZ', 2, '9')," +
+                    "  (4, 'Tehnologii WEB', 'TW', 2, '5')," +
+                    "  (5, 'Informatica aplicata in industrie', 'IAI', 2, '9')," +
+                    "  (6, 'Programare orientata pe obiecte', 'POO', 3, '6')";
+            executeInsertBulkQuery(query, "grades");
+        }
     }
 
     private void executeQuery(String query, String tableName) {
@@ -179,7 +194,7 @@ public class CreateTablesFrame extends JInternalFrame {
             log.info("Table " + tableName + " created.");
             JOptionPane.showMessageDialog(null, tableName.toUpperCase() + " table created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            log.error("Error creating table students : " + e);
+            log.error("Error creating table : " + e);
             JOptionPane.showMessageDialog(null, "Error creating table " + tableName.toUpperCase(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
@@ -193,7 +208,7 @@ public class CreateTablesFrame extends JInternalFrame {
             log.info("Successfully inserted dummy data into " + tableName + " .");
             JOptionPane.showMessageDialog(null, "Successfully inserted dummy data into " + tableName + " .", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            log.error("Error creating table students : " + e);
+            log.error("Error creating table : " + tableName + " : " + e);
             JOptionPane.showMessageDialog(null, "Error inserting data into table " + tableName.toUpperCase(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
